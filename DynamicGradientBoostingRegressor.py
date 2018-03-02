@@ -1,17 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Mar  2 12:23:51 2018
-
-@author: t-blu
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Feb 23 18:26:30 2018
-
-@author: t-blu
-"""
-
+'''Modified by Tyler Blume'''
 from __future__ import print_function
 from __future__ import division
 from sklearn.tree.tree import DecisionTreeRegressor
@@ -39,6 +26,14 @@ from sklearn.ensemble._gradient_boosting import predict_stages
 from sklearn.ensemble._gradient_boosting import predict_stage
 from sklearn.ensemble._gradient_boosting import _random_sample_mask
 from numpy import random
+
+def function(i):
+    if i <1:
+            x = 1
+    else:
+       x= (9*(i)**9)/((i+ .1)**(9+1))
+    return x
+
 
 
 #Here is the function, sets the learning rate to 1 for the first iteration then
