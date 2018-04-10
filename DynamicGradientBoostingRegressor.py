@@ -69,7 +69,7 @@ def function():
 
 
 x = function()
-print(x)
+
 ##############################################################################
 #All of the GBT stuff from Sklearn which is altered to allow dynamic.
 ##############################################################################
@@ -364,7 +364,7 @@ class BaseGradientBoosting(six.with_metaclass(ABCMeta, BaseEnsemble)):
                 if X_csr is not None:
                     loss.update_terminal_regions(tree.tree_, X_csr, y, residual, y_pred,
                                                  sample_weight, sample_mask, function(i), k=k)
-                  else:
+                else:
                     loss.update_terminal_regions(tree.tree_, X, y, residual, y_pred,
                                                  sample_weight, sample_mask,
                                                  function(i), k=k)
@@ -377,7 +377,7 @@ class BaseGradientBoosting(six.with_metaclass(ABCMeta, BaseEnsemble)):
                 if X_csr is not None:
                     loss.update_terminal_regions(tree.tree_, X_csr, y, residual, y_pred,
                                                  sample_weight, sample_mask, function(i), k=k)
-                   else:
+                else:
                     loss.update_terminal_regions(tree.tree_, X, y, residual, y_pred,
                                                  sample_weight, sample_mask,
                                                  function(i), k=k)
@@ -931,6 +931,3 @@ class GradientBoostingRegressor(BaseGradientBoosting, RegressorMixin):
         leaves = super(GradientBoostingRegressor, self).apply(X)
         leaves = leaves.reshape(X.shape[0], self.estimators_.shape[0])
         return leaves
-    
-    
-
