@@ -1,4 +1,4 @@
-'''Modified by Tyler Blume'''
+'''Modified by Tyler Blume and Sam Kowalski'''
 from __future__ import print_function
 from __future__ import division
 from sklearn.tree.tree import DecisionTreeRegressor
@@ -27,20 +27,51 @@ from sklearn.ensemble._gradient_boosting import predict_stage
 from sklearn.ensemble._gradient_boosting import _random_sample_mask
 from numpy import random
 
-def function(i):
-    if i <1:
-            x = 1
-    else:
-       x= (9*(i)**9)/((i+ .1)**(9+1))
-    return x
+def getUserInput():
+   '''Get these variables from use input. 
+       provided here for testing '''
+   userArgVars = 'i, j'
+   userArgs = '1, 0'
+   userInput = (
+'''if i<1:
+  x = 1
+else:
+  x = (9*(i)**9)/((i + .1)**(9+1))
+''')
+   return userInput, userArgs, userArgVars
 
 
 
-#Here is the function, sets the learning rate to 1 for the first iteration then
-#whatever function you want after that, i is the iteration and lamb is the set lambda
+def makeFunc(userInput, userArgVars):
+   func = ['global userFunc']
+   func.append('def userFunc(%s):' % userArgVars)
+   splitted = userInput.split('\n')
+   for spl in splitted:
+       spl = '    ' + spl
+       func.append(spl)
+       
+   func.append('    return x')
+#    func.append('x = func%s' % userArgs)
+#    func.append('return x')
+   
+   func = '\n'.join(func)
+   return func
+   
 
+def function():
+   userInput, userArgs, userArgVars = getUserInput()
+   func = makeFunc(userInput, userArgVars)
+   exec(func)
+
+   x = userFunc(*eval(userArgs))
+
+   return x
+
+
+x = function()
+print(x)
 ##############################################################################
-#All of the GBT stuff from Skelarn which is altered to allow dynamic.
+#All of the GBT stuff from Sklearn which is altered to allow dynamic.
 ##############################################################################
 class BaseEnsemble(six.with_metaclass(ABCMeta, BaseEstimator,
                                       MetaEstimatorMixin)):
@@ -224,7 +255,7 @@ class LeastSquaresError(RegressionLossFunction):
         # update predictions
         y_pred[:, k] += learning_rate* tree.predict(X).ravel()
 
-########################################################################################################################################################################
+
     def _update_terminal_region(self, tree, terminal_regions, leaf, X, y,
                                 residual, pred, sample_weight):
         pass
@@ -333,8 +364,7 @@ class BaseGradientBoosting(six.with_metaclass(ABCMeta, BaseEnsemble)):
                 if X_csr is not None:
                     loss.update_terminal_regions(tree.tree_, X_csr, y, residual, y_pred,
                                                  sample_weight, sample_mask, function(i), k=k)
-                   #############################################################################################################################################   ###########################################                          
-                else:
+                  else:
                     loss.update_terminal_regions(tree.tree_, X, y, residual, y_pred,
                                                  sample_weight, sample_mask,
                                                  function(i), k=k)
@@ -347,15 +377,14 @@ class BaseGradientBoosting(six.with_metaclass(ABCMeta, BaseEnsemble)):
                 if X_csr is not None:
                     loss.update_terminal_regions(tree.tree_, X_csr, y, residual, y_pred,
                                                  sample_weight, sample_mask, function(i), k=k)
-                   #############################################################################################################################################   ###########################################                          
-                else:
+                   else:
                     loss.update_terminal_regions(tree.tree_, X, y, residual, y_pred,
                                                  sample_weight, sample_mask,
                                                  function(i), k=k)
                 
                 # add tree to ensemble
                 self.estimators_[i, k] = tree
-            learning_rate = function(i)
+            
             
             return y_pred
 
